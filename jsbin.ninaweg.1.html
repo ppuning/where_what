@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+
+Copyright (c) 2024 by ppuning (http://jsbin.com/ninaweg/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where Did You Come From?</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .thought {
+      position: absolute;
+      opacity: 0;
+      animation: fadeIn 2s forwards, grow 6s forwards;
+      text-align: center;
+      width: 100%;
+      margin: 0 auto;
+      color: black;
+      font-size: 1rem;
+      font-weight: normal;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes grow {
+      0% {
+        font-size: 1rem;
+        opacity: 0.8;
+      }
+      100% {
+        font-size: 10rem;
+        font-weight: bold;
+        opacity: 1;
+      }
+    }
+
+    .final-thought {
+      font-size: 2rem;
+      font-weight: bold;
+      color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+
+    @keyframes fadeToBlack {
+      0% {
+        background-color: white;
+        color: black;
+      }
+      100% {
+        background-color: black;
+        color: white;
+      }
+    }
+
+    .fade-out {
+      animation: fadeToBlack 3s forwards;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script>
+    const container = document.getElementById("container");
+
+    const thoughts = [
+      "Where did you come from?",
+      "Where did I come from?",
+      "My home?",
+      "Or just now?",
+      "Do they want to know where I grew up or where I was born?",
+      "Is it the way I look? My accent?",
+      "The way I talk? Dress? Eat?",
+      "Where did I come from?",
+      "I grew up in the Philippines, but I was born in Korea.",
+      "I grew up learning two cultures. If someone asks what my ethnicity is, then I'm Korean.",
+      "But I don’t feel Korean.",
+      "Not enough.",
+      "Does that mean I’m Filipina?",
+      "No, I’m considered a foreigner in the Philippines.",
+      "It's weird that I feel more comfortable in the Philippines than I do in Korea.",
+      "But I do feel more at home in Korea than I did before.",
+      "Whatever. I’m just a foreigner in both countries.",
+      "Oh yeah, so back to the question."
+    ];
+
+    const finale = [
+      "What do you mean?"
+    ];
+
+    const initialQuestion = document.createElement("div");
+    initialQuestion.className = "final-thought";
+    initialQuestion.innerText = thoughts[0];
+    initialQuestion.style.cursor = "pointer";
+    initialQuestion.style.color = "black"; // Ensure the initial question is visible
+    container.appendChild(initialQuestion);
+
+    initialQuestion.addEventListener("click", () => {
+      container.removeChild(initialQuestion);
+
+      let delay = 0;
+
+      // Display thoughts sequentially, stacking and growing
+      thoughts.slice(1).forEach((thought, index) => {
+        setTimeout(() => {
+          const div = document.createElement("div");
+          div.className = "thought";
+          div.style.zIndex = index;
+          div.style.fontSize = `${1 + index * 0.2}rem`;
+          div.innerText = thought;
+          container.appendChild(div);
+
+          if (index === thoughts.length - 2) {
+            setTimeout(() => {
+              document.body.style.animation = "fadeToBlack 3s forwards";
+
+              setTimeout(() => {
+                container.innerHTML = "";
+
+                finale.forEach((line, idx) => {
+                  setTimeout(() => {
+                    const finalDiv = document.createElement("div");
+                    finalDiv.className = "final-thought";
+                    finalDiv.innerText = line;
+                    finalDiv.style.color = "white"; // Make finale text white
+
+                    if (idx === 0) {
+                      finalDiv.style.fontSize = "2rem"; // Small for the question
+                    } else if (idx === 1) {
+                      finalDiv.style.fontSize = "10rem"; // Big for "What do you mean?"
+                      finalDiv.style.fontWeight = "bold";
+                    }
+
+                    container.appendChild(finalDiv);
+                  }, idx * 2000);
+                });
+              }, 3000);
+            }, 2000);
+          }
+        }, index * 3000);
+      });
+    });
+  </script>
+</body>
+</html>
